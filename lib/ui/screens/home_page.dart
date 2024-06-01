@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:goaltiky/ui/screens/widgets/plant_widget.dart';
 import 'package:page_transition/page_transition.dart';
@@ -120,81 +122,70 @@ class _HomePageState extends State<HomePage> {
                       width: 200,
                       margin: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Constants.primaryColor.withOpacity(.8),
+                        color: Color(0xff7DA7F7),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Stack(
+                        alignment: AlignmentDirectional.bottomEnd,
                         children: [
                           Positioned(
-                            top: 10,
-                            right: 20,
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              child: IconButton(
-                                onPressed: () {
-                                  setState(
-                                    () {
-                                      bool isFavorited = toggleIsFavorated(
-                                          _completedList[index].isFavorated);
-                                      _completedList[index].isFavorated =
-                                          isFavorited;
-                                    },
-                                  );
-                                },
-                                icon: Icon(
-                                  _completedList[index].isFavorated == true
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: Constants.primaryColor,
-                                ),
-                                iconSize: 30,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 15,
+                            top: 15,
                             left: 20,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _completedList[index].title,
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 16,
-                                  ),
+                            child: Container(
+                              width: 150,
+                              child: Text(
+                                _completedList[index].title,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 20,
                                 ),
-                                Text(
-                                  _completedList[index].plantName,
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                           Positioned(
-                            bottom: 15,
-                            right: 20,
+                            bottom: 40,
+                            left: 20,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
+                              width: 250,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Completed',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 50,
+                                  ),
+                                  Text(
+                                    '100%',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              child: Text(
-                                r'$' + _completedList[index].price.toString(),
-                                style: TextStyle(
-                                    color: Constants.primaryColor,
-                                    fontSize: 16),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 10, 20),
+                            child: Container(
+                              width: 180,
+                              child: LinearProgressIndicator(
+                                minHeight: 8,
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                value:
+                                    0.5, // This sets the progress value (0.0 to 1.0)
+                                backgroundColor: Colors.grey[200],
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.blue),
                               ),
                             ),
                           ),
