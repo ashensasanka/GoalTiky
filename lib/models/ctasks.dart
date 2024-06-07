@@ -6,7 +6,7 @@ class Ctasks {
   final int humidity;
   final String temperature;
   final String title;
-  final String plantName;
+  final String duedate;
   bool isFavorated;
   final String decription;
   bool isSelected;
@@ -15,7 +15,7 @@ class Ctasks {
       {required this.ctaskId,
         required this.price,
         required this.title,
-        required this.plantName,
+        required this.duedate,
         required this.size,
         required this.rating,
         required this.humidity,
@@ -25,12 +25,12 @@ class Ctasks {
         required this.isSelected});
 
   //List of Plants data
-  static List<Ctasks> plantList = [
+  static List<Ctasks> cTasksList = [
     Ctasks(
         ctaskId: 0,
         price: 22,
         title: 'Submit Project Proposal',
-        plantName: 'Sanseviera',
+        duedate: '20 June',
         size: 'Small',
         rating: 4.5,
         humidity: 34,
@@ -44,7 +44,7 @@ class Ctasks {
         ctaskId: 1,
         price: 11,
         title: 'Mobile App Design',
-        plantName: 'Philodendron',
+        duedate: '21 March',
         size: 'Medium',
         rating: 4.8,
         humidity: 56,
@@ -58,7 +58,7 @@ class Ctasks {
         ctaskId: 2,
         price: 18,
         title: 'Submit Project Proposal',
-        plantName: 'Beach Daisy',
+        duedate: 'Beach Daisy',
         size: 'Large',
         rating: 4.7,
         humidity: 34,
@@ -72,7 +72,7 @@ class Ctasks {
         ctaskId: 3,
         price: 30,
         title: 'Mobile App Design',
-        plantName: 'Big Bluestem',
+        duedate: 'Big Bluestem',
         size: 'Small',
         rating: 4.5,
         humidity: 35,
@@ -86,13 +86,13 @@ class Ctasks {
 
   //Get the favorated items
   static List<Ctasks> getFavoritedPlants(){
-    List<Ctasks> _travelList = Ctasks.plantList;
+    List<Ctasks> _travelList = Ctasks.cTasksList;
     return _travelList.where((element) => element.isFavorated == true).toList();
   }
 
   //Get the cart items
   static List<Ctasks> addedToCartPlants(){
-    List<Ctasks> _selectedPlants = Ctasks.plantList;
+    List<Ctasks> _selectedPlants = Ctasks.cTasksList;
     return _selectedPlants.where((element) => element.isSelected == true).toList();
   }
 }

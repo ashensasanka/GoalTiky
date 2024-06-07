@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:goaltiky/ui/screens/widgets/plant_widget.dart';
+import 'package:goaltiky/ui/screens/widgets/task_widget.dart';
 
 import '../../constants.dart';
 import '../../models/ctasks.dart';
@@ -52,8 +52,8 @@ class _CartPageState extends State<CartPage> {
                       scrollDirection: Axis.vertical,
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
-                        return PlantWidget(
-                            index: index, plantList: widget.addedToCartPlants);
+                        return TaskWidget(
+                            index: index, cTaskList: widget.addedToCartPlants);
                       },
                     ),
                   ),

@@ -1,9 +1,7 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:goaltiky/ui/screens/widgets/plant_widget.dart';
+import 'package:goaltiky/ui/screens/widgets/task_widget.dart';
 import 'package:page_transition/page_transition.dart';
-
 import '../../constants.dart';
 import '../../models/ctasks.dart';
 import 'detail_page.dart';
@@ -21,7 +19,7 @@ class _HomePageState extends State<HomePage> {
     int selectedIndex = 0;
     Size size = MediaQuery.of(context).size;
 
-    List<Ctasks> _completedList = Ctasks.plantList;
+    List<Ctasks> _completedList = Ctasks.cTasksList;
 
     //Toggle Favorite button
     bool toggleIsFavorated(bool isFavorited) {
@@ -112,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                         context,
                         PageTransition(
                           child: DetailPage(
-                            plantId: _completedList[index].ctaskId,
+                            taskId: _completedList[index].ctaskId,
                           ),
                           type: PageTransitionType.bottomToTop,
                         ),
@@ -145,26 +143,42 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Positioned(
-                            bottom: 40,
-                            left: 20,
+                            top: 150,
+                            left: 10,
+                            child: Container(
+                              width: 150,
+                              child: Text(
+                                'Team Members',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 35,
+                            left: 10,
                             child: Container(
                               width: 250,
-                              child: Row(
+                              child: const Row(
                                 children: [
                                   Text(
                                     'Completed',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 15,
+                                      fontSize: 14,
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 50,
+                                    width: 70,
                                   ),
                                   Text(
                                     '100%',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 15,
@@ -179,10 +193,10 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                               width: 180,
                               child: LinearProgressIndicator(
-                                minHeight: 8,
+                                minHeight: 6,
                                 borderRadius: BorderRadius.all(Radius.circular(10)),
                                 value:
-                                    0.5, // This sets the progress value (0.0 to 1.0)
+                                    0.5,
                                 backgroundColor: Colors.grey[200],
                                 valueColor:
                                     AlwaysStoppedAnimation<Color>(Colors.blue),
@@ -196,14 +210,29 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(left: 16, bottom: 20, top: 20),
-              child: const Text(
-                'New Plants',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0,
-                ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
+                    child: Text(
+                      'Ongoing  Works',
+                      style: TextStyle(
+                        color: Color(0xff1868FE),
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'See all',
+                    style: TextStyle(
+                      color: Color(0xff1868FE),
+                      fontSize: 17,
+                    ),
+                  ),
+                ],
               ),
             ),
             Container(
@@ -220,15 +249,15 @@ class _HomePageState extends State<HomePage> {
                         context,
                         PageTransition(
                           child: DetailPage(
-                            plantId: _completedList[index].ctaskId,
+                            taskId: _completedList[index].ctaskId,
                           ),
                           type: PageTransitionType.bottomToTop,
                         ),
                       );
                     },
-                    child: PlantWidget(
+                    child: TaskWidget(
                       index: index,
-                      plantList: _completedList,
+                      cTaskList: _completedList,
                     ),
                   );
                 },

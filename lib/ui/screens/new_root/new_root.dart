@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../../models/ctasks.dart';
 import '../cart_page.dart';
-import '../favorite_page.dart';
+import '../create_work/create_work.dart';
+import '../time_line_page.dart';
 import '../home_page.dart';
 import '../profile_page.dart';
 import '../widgets/drawer_widget.dart';
@@ -21,8 +22,8 @@ class _NewRootPageState extends State<NewRootPage> {
   List<Ctasks> myCart = [];
   List<String> titleList = [
     'Welcome Back!',
-    'Favorite',
-    'Cart',
+    'Time Lines',
+    'How Create Work',
     'Profile',
     'Profile',
   ];
@@ -32,11 +33,11 @@ class _NewRootPageState extends State<NewRootPage> {
       color: Colors.white,
     ),
     Icon(
-      Icons.favorite,
+      Icons.calendar_month,
       color: Colors.white,
     ),
     Icon(
-      Icons.shopping_cart,
+      Icons.add_circle_outline_rounded,
       color: Colors.white,
     ),
     Icon(
@@ -50,8 +51,10 @@ class _NewRootPageState extends State<NewRootPage> {
   ];
   List<Widget> _widgetOptions() {
     return [const HomePage(),
-      FavoritePage(favoritedPlants: favorites,),
-      CartPage(addedToCartPlants: myCart,),
+      TimeTrackingPage(),
+      // TimeLinePage(favoritedPlants: favorites,),
+      CreateWork(),
+      // CartPage(addedToCartPlants: myCart,),
       const ProfilePage(),
       CartPage(addedToCartPlants: myCart,),];
   }
@@ -64,13 +67,14 @@ class _NewRootPageState extends State<NewRootPage> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 30,
+            color: Color(0xff1868FE)
           ),
         ),
         backgroundColor: Color(0xFFD2DCFF),
         elevation: 0.0,
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xffE2ECFF),
         color: Color(0xff004BFE),
         animationDuration: const Duration(milliseconds: 300),
         onTap: (index) {

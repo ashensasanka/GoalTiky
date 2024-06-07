@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:goaltiky/ui/screens/widgets/all_task_widget.dart';
+import 'package:goaltiky/ui/screens/widgets/task_widget.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../../constants.dart';
 import '../../models/ctasks.dart';
+import 'add_tasks/add_tasks.dart';
+import 'new_root/new_root.dart';
 
 class DetailPage extends StatefulWidget {
-  final int plantId;
-  const DetailPage({Key? key, required this.plantId}) : super(key: key);
+  final int taskId;
+  const DetailPage({Key? key, required this.taskId}) : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -25,99 +31,33 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<Ctasks> _plantList = Ctasks.plantList;
+    List<Ctasks> _cTasksList = Ctasks.cTasksList;
+    double progressValue = 50;
     return Scaffold(
+      backgroundColor: Color(0xffE2ECFF),
       body: Stack(
         children: [
           Positioned(
-            top: 50,
+            top: 60,
             left: 20,
-            right: 20,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Constants.primaryColor.withOpacity(.15),
-                    ),
-                    child: Icon(
-                      Icons.close,
-                      color: Constants.primaryColor,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    debugPrint('favorite');
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Constants.primaryColor.withOpacity(.15),
-                    ),
-                    child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            bool isFavorited = toggleIsFavorated(
-                                _plantList[widget.plantId].isFavorated);
-                            _plantList[widget.plantId].isFavorated =
-                                isFavorited;
-                          });
-                        },
-                        icon: Icon(
-                          _plantList[widget.plantId].isFavorated == true
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: Constants.primaryColor,
-                        )),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 100,
-            left: 20,
-            right: 20,
-            child: Container(
-              width: size.width * .8,
-              height: size.height * .8,
-              padding: const EdgeInsets.all(20),
-              child: Stack(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Row(
                 children: [
-                  Positioned(
-                    top: 10,
-                    right: 0,
-                    child: SizedBox(
-                      height: 200,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          PlantFeature(
-                            title: 'Size',
-                            plantFeature: _plantList[widget.plantId].size,
-                          ),
-                          PlantFeature(
-                            title: 'Humidity',
-                            plantFeature:
-                                _plantList[widget.plantId].humidity.toString(),
-                          ),
-                          PlantFeature(
-                            title: 'Temperature',
-                            plantFeature:
-                                _plantList[widget.plantId].temperature,
-                          ),
-                        ],
+                  Icon(
+                    Icons.arrow_back,
+                    color: Color(0xff455A64),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(80, 0, 0, 0),
+                    child: Text(
+                      'Task Details',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Color(0xff1868FE),
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -126,81 +66,215 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
           Positioned(
-            bottom: 0,
+            top: 120,
             left: 0,
             right: 0,
-            child: Container(
-              padding: const EdgeInsets.only(top: 80, left: 30, right: 30),
-              height: size.height * .5,
-              width: size.width,
-              decoration: BoxDecoration(
-                color: Constants.primaryColor.withOpacity(.4),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  topLeft: Radius.circular(30),
-                ),
-              ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    _cTasksList[widget.taskId].title,
+                    style: TextStyle(
+                        color: Color(0xff1868FE),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 23.0,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _plantList[widget.plantId].plantName,
-                            style: TextStyle(
-                              color: Constants.primaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30.0,
+                      Container(
+                        width: 185,
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Color(0xff7DA7F7),
+                              ),
+                              child: Image.asset(
+                                'assets/images/calendarremove.png',
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            r'$' + _plantList[widget.plantId].price.toString(),
-                            style: TextStyle(
-                              color: Constants.blackColor,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
+                            SizedBox(
+                              width: 10,
                             ),
-                          ),
-                        ],
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Due Date',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xff7DA7F7),
+                                  ),
+                                ),
+                                Container(
+                                  width: 100,
+                                  height: 25,
+                                  child: Text(
+                                    _cTasksList[widget.taskId].duedate,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Color(0xff1868FE),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            _plantList[widget.plantId].rating.toString(),
-                            style: TextStyle(
-                              fontSize: 30.0,
-                              color: Constants.primaryColor,
+                      Container(
+                        width: 185,
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Color(0xff7DA7F7),
+                              ),
+                              child: Image.asset(
+                                'assets/images/profile2user.png',
+                              ),
                             ),
-                          ),
-                          Icon(
-                            Icons.star,
-                            size: 30.0,
-                            color: Constants.primaryColor,
-                          ),
-                        ],
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Project Team',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xff7DA7F7),
+                                  ),
+                                ),
+                                Container(
+                                  width: 100,
+                                  height: 25,
+                                  child: Text(
+                                    _cTasksList[widget.taskId].duedate,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Color(0xff1868FE),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 5.0,
+                  SizedBox(
+                    height: 14,
                   ),
-                  Expanded(
+                  Text(
+                    'Work Details',
+                    style: TextStyle(
+                      color: Color(0xff1868FE),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 23.0,
+                    ),
+                  ),
+                  Container(
+                    width: 350,
+                    height: 100,
                     child: Text(
-                      _plantList[widget.plantId].decription,
-                      textAlign: TextAlign.justify,
+                      _cTasksList[widget.taskId].decription,
                       style: TextStyle(
-                        height: 1.5,
-                        fontSize: 18,
-                        color: Constants.blackColor.withOpacity(.7),
+                        fontSize: 15,
+                        color: Color(0xff7DA7F7),
                       ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Work Progress',
+                        style: TextStyle(
+                          color: Color(0xff1868FE),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 23.0,
+                        ),
+                      ),
+                      Container(
+                        width: 80,
+                        height: 80,
+                        child: SfRadialGauge(
+                          axes: <RadialAxis>[
+                            RadialAxis(
+                              minimum: 0,
+                              maximum: 100,
+                              showLabels: false,
+                              showTicks: false,
+                              startAngle: 270,
+                              endAngle: 270,
+                              axisLineStyle: AxisLineStyle(
+                                thickness: 1,
+                                color: Color.fromARGB(30, 0, 169, 181),
+                                thicknessUnit: GaugeSizeUnit.factor,
+                              ),
+                              pointers: <GaugePointer>[
+                                RangePointer(
+                                  value: progressValue,
+                                  width: 0.1,
+                                  color: Color(0xffFED36A),
+                                  pointerOffset: 0.1,
+                                  cornerStyle: CornerStyle.bothCurve,
+                                  sizeUnit: GaugeSizeUnit.factor,
+                                ),
+                              ],
+                              annotations: <GaugeAnnotation>[
+                                GaugeAnnotation(
+                                  positionFactor: 0.5,
+                                  angle: 90,
+                                  widget: Text(
+                                    progressValue.toStringAsFixed(0) + '%',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.black.withOpacity(0.6),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    'All Tasks',
+                    style: TextStyle(
+                      color: Color(0xff1868FE),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 23.0,
+                    ),
+                  ),
+                  Container(
+                    height: size.height * .33,
+                    child: ListView.builder(
+                      itemCount: _cTasksList.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return AllTaskWidget(
+                          taskId: _cTasksList[index].ctaskId,
+                          index: index,
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -210,61 +284,21 @@ class _DetailPageState extends State<DetailPage> {
         ],
       ),
       floatingActionButton: SizedBox(
-        width: size.width * .9,
-        height: 50,
-        child: Row(
-          children: [
-            Container(
-              height: 50,
-              width: 50,
-              child: IconButton(onPressed: (){
-                setState(() {
-                  bool isSelected = toggleIsSelected(_plantList[widget.plantId].isSelected);
-
-                  _plantList[widget.plantId].isSelected = isSelected;
-                });
-              }, icon: Icon(
-                Icons.shopping_cart,
-                color: _plantList[widget.plantId].isSelected == true ? Colors.white : Constants.primaryColor,
-              )),
-              decoration: BoxDecoration(
-                  color: _plantList[widget.plantId].isSelected == true ? Constants.primaryColor.withOpacity(.5) : Colors.white,
-                  borderRadius: BorderRadius.circular(50),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: const Offset(0, 1),
-                      blurRadius: 5,
-                      color: Constants.primaryColor.withOpacity(.3),
-                    ),
-                  ]),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Constants.primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(0, 1),
-                        blurRadius: 5,
-                        color: Constants.primaryColor.withOpacity(.3),
-                      )
-                    ]),
-                child: const Center(
-                  child: Text(
-                    'BUY NOW',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                ),
+        height: 65,
+        width: 65,
+        child: FloatingActionButton(
+            shape: CircleBorder(),
+          backgroundColor: Color(0xff1868FE),
+          onPressed: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                child:  AddTasks(),
+                type: PageTransitionType.bottomToTop,
               ),
-            ),
-          ],
+            );
+          },
+          child: const Icon(Icons.add,size: 40,),
         ),
       ),
     );
