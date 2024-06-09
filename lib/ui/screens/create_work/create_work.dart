@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:goaltiky/ui/screens/create_work/self_made_goal.dart';
+import 'package:goaltiky/ui/screens/create_work/date_picker.dart';
 import 'package:page_transition/page_transition.dart';
+
+import '../profile/profile.dart';
 
 class CreateWork extends StatefulWidget {
   const CreateWork({super.key});
@@ -24,13 +27,13 @@ class _CreateWorkState extends State<CreateWork> {
           SizedBox(height: 30,),
           GestureDetector(
             onTap: () {
-              // Navigator.pushReplacement(
-              //   context,
-              //   PageTransition(
-              //     child: const NewRootPage(),
-              //     type: PageTransitionType.bottomToTop,
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                PageTransition(
+                  child: const Profile(),
+                  type: PageTransitionType.bottomToTop,
+                ),
+              );
             },
             child: Container(
               height: 60,
