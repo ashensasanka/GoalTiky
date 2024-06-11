@@ -16,15 +16,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    int selectedIndex = 0;
     Size size = MediaQuery.of(context).size;
-
     List<Ctasks> _completedList = Ctasks.cTasksList;
-
-    //Toggle Favorite button
-    bool toggleIsFavorated(bool isFavorited) {
-      return !isFavorited;
-    }
 
     return Scaffold(
       backgroundColor: Color(0xffE2ECFF),

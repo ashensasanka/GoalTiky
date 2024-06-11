@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import '../../../models/ctasks.dart';
 import '../cart_page.dart';
 import '../create_work/create_work.dart';
+import '../feedbacks/feedbacks.dart';
 import '../time_line_page.dart';
 import '../home_page.dart';
-import '../profile_page.dart';
+import '../profile/profile_page.dart';
 import '../widgets/drawer_widget.dart';
 
 class NewRootPage extends StatefulWidget {
@@ -25,7 +26,7 @@ class _NewRootPageState extends State<NewRootPage> {
     'Time Lines',
     'How Create Work',
     'Profile',
-    'Profile',
+    'Feedbacks',
   ];
   List<Widget> iconList = [
     Icon(
@@ -45,33 +46,39 @@ class _NewRootPageState extends State<NewRootPage> {
       color: Colors.white,
     ),
     Icon(
-      Icons.person,
+      Icons.feedback_outlined,
       color: Colors.white,
     ),
   ];
   List<Widget> _widgetOptions() {
-    return [const HomePage(),
+    return [
+      const HomePage(),
       TimeTrackingPage(),
-      // TimeLinePage(favoritedPlants: favorites,),
-      CreateWork(),
-      // CartPage(addedToCartPlants: myCart,),
+      const CreateWork(),
       const ProfilePage(),
-      CartPage(addedToCartPlants: myCart,),];
+      const FeedBacks(),
+    ];
   }
+
+  void updateNavIndex(int index) {
+    setState(() {
+      _bottomNavIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           titleList[_bottomNavIndex],
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 30,
-            color: Color(0xff1868FE)
-          ),
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+              color: Color(0xff1868FE)),
         ),
-        backgroundColor: Color(0xFFD2DCFF),
-        elevation: 0.0,
+        backgroundColor: Color(0xFFD2E1FD),
       ),
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Color(0xffE2ECFF),
@@ -79,7 +86,7 @@ class _NewRootPageState extends State<NewRootPage> {
         animationDuration: const Duration(milliseconds: 300),
         onTap: (index) {
           setState(
-                () {
+            () {
               _bottomNavIndex = index;
             },
           );
@@ -90,7 +97,7 @@ class _NewRootPageState extends State<NewRootPage> {
         index: _bottomNavIndex,
         children: _widgetOptions(),
       ),
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(onNavIndexChange: updateNavIndex),
     );
   }
 }

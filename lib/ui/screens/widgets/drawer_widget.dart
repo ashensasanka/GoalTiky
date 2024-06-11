@@ -2,10 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
+import 'package:page_transition/page_transition.dart';
+
+import '../create_work/self_made_goal.dart';
+import '../new_root/new_root.dart';
+
 // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 // final User? user = FirebaseAuth.instance.currentUser;
 
 class DrawerWidget extends StatefulWidget {
+  final Function(int) onNavIndexChange;
+  const DrawerWidget({required this.onNavIndexChange, Key? key}) : super(key: key);
   @override
   State<DrawerWidget> createState() => _DrawerWidgetState();
 }
@@ -89,7 +96,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           DrawerHeader(
             padding: EdgeInsets.zero,
             child: UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: Color(0xfff9a130)),
+              decoration: BoxDecoration(color: Color(0xff6EACFF),),
               accountName: Text('Ashen'),
               // StreamBuilder<DocumentSnapshot>(
               //   stream: _firestore
@@ -171,49 +178,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ),
             ),
             onTap: () {
-              // Navigate to Home Page
-              Navigator.pop(context); // Close Drawer
-              Navigator.pushNamed(context, '/homePage');
-            },
-          ),
-
-          // My Account
-          ListTile(
-            leading: Icon(
-              CupertinoIcons.person,
-              color: Colors.red,
-            ),
-            title: Text(
-              "Quizzes",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: () {
-              // Navigate to My Account Page
-              Navigator.pop(context); // Close Drawer
-              Navigator.pushNamed(context, '/quizes');
-            },
-          ),
-
-          // My Orders
-          ListTile(
-            leading: Icon(
-              CupertinoIcons.play_circle,
-              color: Colors.red,
-            ),
-            title: Text(
-              "Video Tutorials",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: () {
-              // Navigate to My Orders Page
-              Navigator.pop(context); // Close Drawer
-              Navigator.pushNamed(context, '/videos');
+              Navigator.pop(context);
+              widget.onNavIndexChange(0);
             },
           ),
 

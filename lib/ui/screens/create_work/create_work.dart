@@ -3,7 +3,7 @@ import 'package:goaltiky/ui/screens/create_work/self_made_goal.dart';
 import 'package:goaltiky/ui/screens/create_work/date_picker.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../profile/profile.dart';
+import '../profile/test_page.dart';
 
 class CreateWork extends StatefulWidget {
   const CreateWork({super.key});

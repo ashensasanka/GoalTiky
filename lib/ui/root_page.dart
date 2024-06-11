@@ -4,7 +4,7 @@ import 'package:goaltiky/ui/scan_page.dart';
 import 'package:goaltiky/ui/screens/cart_page.dart';
 import 'package:goaltiky/ui/screens/time_line_page.dart';
 import 'package:goaltiky/ui/screens/home_page.dart';
-import 'package:goaltiky/ui/screens/profile_page.dart';
+import 'package:goaltiky/ui/screens/profile/profile_page.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../constants.dart';
