@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "167117325701",
+    "project_id": "goaltiky-c6a91",
+    "storage_bucket": "goaltiky-c6a91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167117325701:android:f2cb0e19822d0ec6b1b0ec",
+        "android_client_info": {
+          "package_name": "com.example.goaltiky"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDstfiSku6PqNnHAT23maSfXM8lHEY6qs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
