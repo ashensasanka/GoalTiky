@@ -53,7 +53,7 @@ class _SelfMadeGoalState extends State<SelfMadeGoal> {
         'time': selectedTime!.format(context),
         'date': formattedDate,
         // Add other fields as needed
-      });
+      },);
       setState(() {
         tasksTitleController.clear();
         workDetailsController.clear();

@@ -11,17 +11,16 @@ class DatePicker extends StatefulWidget {
 }
 
 /// RestorationProperty objects can be used because of RestorationMixin.
-class _DatePickerState extends State<DatePicker>
-    with RestorationMixin {
+class _DatePickerState extends State<DatePicker> with RestorationMixin {
   // In this example, the restoration ID for the mixin is passed in through
   // the [StatefulWidget]'s constructor.
   @override
   String? get restorationId => widget.restorationId;
 
   final RestorableDateTime _selectedDate =
-  RestorableDateTime(DateTime(2024, 6, 26));
+      RestorableDateTime(DateTime(2024, 6, 26));
   late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
-  RestorableRouteFuture<DateTime?>(
+      RestorableRouteFuture<DateTime?>(
     onComplete: _selectDate,
     onPresent: (NavigatorState navigator, Object? arguments) {
       return navigator.restorablePush(
@@ -33,9 +32,9 @@ class _DatePickerState extends State<DatePicker>
 
   @pragma('vm:entry-point')
   static Route<DateTime> _datePickerRoute(
-      BuildContext context,
-      Object? arguments,
-      ) {
+    BuildContext context,
+    Object? arguments,
+  ) {
     return DialogRoute<DateTime>(
       context: context,
       builder: (BuildContext context) {
@@ -59,17 +58,22 @@ class _DatePickerState extends State<DatePicker>
 
   void _selectDate(DateTime? newSelectedDate) {
     if (newSelectedDate != null) {
-      setState(() {
-        _selectedDate.value = newSelectedDate;
-        widget.onDateSelected?.call(newSelectedDate);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),
-        ));
-      });
+      setState(
+        () {
+          _selectedDate.value = newSelectedDate;
+          widget.onDateSelected?.call(newSelectedDate);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),
+            ),
+          );
+        },
+      );
     }
   }
-bool state = false;
+
+  bool state = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,32 +95,33 @@ bool state = false;
                   'assets/images/calendar.png',
                 ),
               ),
-              state?
-              Container(
-                height: 50,
-                width: 120,
-                decoration: BoxDecoration(
-                  color: Color(0xff455A64),
-                ),
-                child: Center(
-                  child: Text(
-                    '${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 23),
-                  ),
-                ),
-              ):Container(
-                height: 50,
-                width: 120,
-                decoration: BoxDecoration(
-                  color: Color(0xff455A64),
-                ),
-                child: Center(
-                  child: Text(''),
-                ),
-              ),
+              state
+                  ? Container(
+                      height: 50,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        color: Color(0xff455A64),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 23),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      height: 50,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        color: Color(0xff455A64),
+                      ),
+                      child: Center(
+                        child: Text(''),
+                      ),
+                    ),
             ],
           ),
         ),
