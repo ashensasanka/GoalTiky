@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class DatePicker extends StatefulWidget {
-  const DatePicker({super.key, this.restorationId});
-
+  final ValueChanged<DateTime>? onDateSelected;
   final String? restorationId;
+
+  const DatePicker({super.key, this.restorationId, this.onDateSelected});
 
   @override
   State<DatePicker> createState() => _DatePickerState();
@@ -60,6 +61,7 @@ class _DatePickerState extends State<DatePicker>
     if (newSelectedDate != null) {
       setState(() {
         _selectedDate.value = newSelectedDate;
+        widget.onDateSelected?.call(newSelectedDate);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
               'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),

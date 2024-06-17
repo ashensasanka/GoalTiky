@@ -1,35 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:goaltiky/ui/onboarding_screen.dart';
 import 'dart:io';
 
-import 'package:page_transition/page_transition.dart';
+import 'package:image_picker/image_picker.dart';
 
-import '../create_work/self_made_goal.dart';
-import '../new_root/new_root.dart';
+import '../../../controller/firestore.dart';
 
-// final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-// final User? user = FirebaseAuth.instance.currentUser;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class DrawerWidget extends StatefulWidget {
   final Function(int) onNavIndexChange;
-  const DrawerWidget({required this.onNavIndexChange, Key? key}) : super(key: key);
+  const DrawerWidget({required this.onNavIndexChange, Key? key})
+      : super(key: key);
   @override
   State<DrawerWidget> createState() => _DrawerWidgetState();
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   File? _image;
-  // final FireStoreService fireStoreService = FireStoreService();
+  final FireStoreService fireStoreService = FireStoreService();
+  final User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> _getImageFromGallery() async {
-    // final pickedFile =
-    // await ImagePicker().pickImage(source: ImageSource.gallery);
-    // if (pickedFile != null) {
-    //   setState(() {
-    //     _image = File(pickedFile.path);
-    //   });
-    // }
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(
+        () {
+          _image = File(pickedFile.path);
+        },
+      );
+    }
   }
+
   void openNoteBox() {
     showDialog(
       context: context,
@@ -39,26 +46,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               GestureDetector(
-                onTap:  _getImageFromGallery,
+                onTap: _getImageFromGallery,
                 child: Container(
                   width: 150,
                   height: 150,
                   decoration: BoxDecoration(
-                    color: Colors.white, // Set the background color
-                    borderRadius:
-                    BorderRadius.circular(20), // Round the borders
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: _image != null
                       ? Image.file(
-                    _image!,
-                    fit: BoxFit.cover,
-                  )
+                          _image!,
+                          fit: BoxFit.cover,
+                        )
                       : Icon(
-                    Icons
-                        .add_photo_alternate, // Add an icon for image selection
-                    size: 50,
-                    color: Colors.grey, // Set the icon color
-                  ),
+                          Icons.add_photo_alternate,
+                          size: 50,
+                          color: Colors.grey,
+                        ),
                 ),
               ),
             ],
@@ -67,18 +72,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         actions: [
           ElevatedButton(
             onPressed: () {
-              // fireStoreService.addProPic(
-              //     user?.uid,
-              //     _image,
-              //     'image'
-              // );
-              // Fluttertoast.showToast(
-              //   msg: "Note added successfully",
-              //   toastLength: Toast.LENGTH_SHORT,
-              //   gravity: ToastGravity.BOTTOM,
-              //   backgroundColor: Colors.green,
-              //   textColor: Colors.white,
-              // );
+              fireStoreService.addProPic(
+                  user?.uid,
+                  _image,
+                  'image'
+              );
+              Fluttertoast.showToast(
+                msg: "Note added successfully",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+              );
 
               Navigator.pop(context);
             },
@@ -88,80 +93,89 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
+    final User? user = FirebaseAuth.instance.currentUser;
     return Drawer(
       child: ListView(
         children: [
           DrawerHeader(
             padding: EdgeInsets.zero,
             child: UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: Color(0xff6EACFF),),
-              accountName: Text('Ashen'),
-              // StreamBuilder<DocumentSnapshot>(
-              //   stream: _firestore
-              //       .collection('login_users')
-              //       .doc(user?.uid)
-              //       .snapshots(),
-              //   builder: (context, snapshot) {
-              //     if (snapshot.connectionState == ConnectionState.waiting) {
-              //       return Center(child: CircularProgressIndicator());
-              //     }
-              //     if (snapshot.hasError) {
-              //       return Center(child: Text('Error: ${snapshot.error}'));
-              //     }
-              //     final DocumentSnapshot document = snapshot.data!;
-              //     final Map<String, dynamic> data =
-              //     document.data() as Map<String, dynamic>;
-              //     return Text(
-              //       '${data['name']}',
-              //       style: TextStyle(
-              //         fontSize: 20.0,
-              //         fontWeight: FontWeight.bold,
-              //       ),
-              //     );
-              //   },
-              // ),
-              accountEmail: Text('ashen@gmail.com'),
-              // StreamBuilder<DocumentSnapshot>(
-              //   stream: _firestore.collection('login_users').doc(user?.uid).snapshots(),
-              //   builder: (context, snapshot) {
-              //     if (snapshot.connectionState == ConnectionState.waiting) {
-              //       return Center(child: CircularProgressIndicator());
-              //     }
-              //     if (snapshot.hasError) {
-              //       return Center(child: Text('Error: ${snapshot.error}'));
-              //     }
-              //     final DocumentSnapshot document = snapshot.data!;
-              //     final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-              //     return Text('${data['email']}',
-              //       style: TextStyle(
-              //         fontSize: 16.0,
-              //       ),);
-              //   },
-              // ),
-              currentAccountPicture: Image.asset('assets/images/android.png'),
-              // GestureDetector(
-              //   onTap: openNoteBox,
-              //   child: StreamBuilder<DocumentSnapshot>(
-              //     stream: _firestore.collection('login_users').doc(user?.uid).snapshots(),
-              //     builder: (context, snapshot) {
-              //       if (snapshot.connectionState == ConnectionState.waiting) {
-              //         return Center(child: CircularProgressIndicator());
-              //       }
-              //       if (snapshot.hasError) {
-              //         return Center(child: Text('Error: ${snapshot.error}'));
-              //       }
-              //       final DocumentSnapshot document = snapshot.data!;
-              //       final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-              //       return data['imageUrl'] == null? CircleAvatar(
-              //         backgroundImage: AssetImage("assets/propic.png"),
-              //       ):CircleAvatar(
-              //         backgroundImage: NetworkImage("${data['imageUrl']}"),
-              //       );
-              //     },
-              //   ),
-              // ),
+              decoration: BoxDecoration(
+                color: Color(0xff6EACFF),
+              ),
+              accountName: StreamBuilder<DocumentSnapshot>(
+                stream:
+                    _firestore.collection('users').doc(user?.uid).snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  final DocumentSnapshot document = snapshot.data!;
+                  final Map<String, dynamic> data =
+                      document.data() as Map<String, dynamic>;
+                  return Text(
+                    '${data['name']}',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
+              ),
+              accountEmail: StreamBuilder<DocumentSnapshot>(
+                stream:
+                    _firestore.collection('users').doc(user?.uid).snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  final DocumentSnapshot document = snapshot.data!;
+                  final Map<String, dynamic> data =
+                      document.data() as Map<String, dynamic>;
+                  return Text(
+                    '${data['email']}',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  );
+                },
+              ),
+              currentAccountPicture: GestureDetector(
+                onTap: openNoteBox,
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream:
+                      _firestore.collection('users').doc(user?.uid).snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+                    final DocumentSnapshot document = snapshot.data!;
+                    final Map<String, dynamic> data =
+                        document.data() as Map<String, dynamic>;
+                    return data['imageUrl'] == ''
+                        ? CircleAvatar(
+                            backgroundImage:
+                                AssetImage('assets/images/propic.png'),
+                          )
+                        : CircleAvatar(
+                            backgroundImage:
+                                NetworkImage("${data['imageUrl']}"),
+                          );
+                  },
+                ),
+              ),
             ),
           ),
           // Home
@@ -238,20 +252,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             ),
             onTap: () async {
               // Sign out the current user
-              // try {
-              //   await FirebaseAuth.instance.signOut();
-              //   // Navigate to the login screen or home screen after sign out
-              //   // Example:
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => SelectUserType(),
-              //     ),
-              //   );
-              // } catch (e) {
-              //   print('Error signing out: $e');
-              //   // Handle signout error
-              // }
+              try {
+                await FirebaseAuth.instance.signOut();
+                // Navigate to the login screen or home screen after sign out
+                // Example:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OnboardingScreen(),
+                  ),
+                );
+              } catch (e) {
+                print('Error signing out: $e');
+                // Handle signout error
+              }
             },
           ),
         ],

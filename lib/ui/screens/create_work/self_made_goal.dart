@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:goaltiky/ui/screens/create_work/date_picker.dart';
-import 'package:page_transition/page_transition.dart';
-
+import '../../../library/select_dialog.dart';
 import '../../../models/ctasks.dart';
-import '../detail_page.dart';
 
 class SelfMadeGoal extends StatefulWidget {
   const SelfMadeGoal({super.key});
@@ -14,19 +16,63 @@ class SelfMadeGoal extends StatefulWidget {
 
 class _SelfMadeGoalState extends State<SelfMadeGoal> {
   TimeOfDay? selectedTime;
+  DateTime? selectedDate;
   String? dropdownValue;
   TimePickerEntryMode entryMode = TimePickerEntryMode.dial;
   Orientation? orientation;
   MaterialTapTargetSize tapTargetSize = MaterialTapTargetSize.padded;
   TextDirection textDirection = TextDirection.ltr;
   bool use24HourTime = false;
+  List<String> ex5 = [];
   List<TextEditingController> listController = [TextEditingController()];
 
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController tasksTitleController = TextEditingController();
+  TextEditingController workDetailsController = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> _submitDataToFirestore() async {
+    // Access Firestore instance
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+
+    // Add your Firestore collection name
+    CollectionReference taskDataCollection =
+        firestore.collection('tasks${user?.uid}');
+    QuerySnapshot querySnapshot = await taskDataCollection.get();
+    int tasksLength = querySnapshot.docs.length;
+    String formattedDate = selectedDate?.toIso8601String()?.split('T')?.first ?? '';
+    // Add data to Firestore
+    try {
+      await taskDataCollection.doc().set({
+        'taskIndex': tasksLength,
+        'taskTitle': tasksTitleController.text,
+        'workDetails': workDetailsController.text,
+        'workType': dropdownValue,
+        'members': ex5,
+        'time': selectedTime!.format(context),
+        'date': formattedDate,
+        // Add other fields as needed
+      });
+      setState(() {
+        tasksTitleController.clear();
+        workDetailsController.clear();
+        selectedTime = null;
+        dropdownValue = null;
+        selectedDate = null;
+        ex5.clear();
+      });
+      print('Data submitted to Firestore successfully!');
+    } catch (e) {
+      print('Error submitting data to Firestore: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Ctasks> _completedList = Ctasks.cTasksList;
     Size size = MediaQuery.of(context).size;
+    int? counts = ex5.length + 1;
     return Scaffold(
       backgroundColor: Color(0xffE2ECFF),
       body: SingleChildScrollView(
@@ -83,7 +129,7 @@ class _SelfMadeGoalState extends State<SelfMadeGoal> {
                   padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                   child: TextField(
                     cursorColor: Colors.white,
-                    controller: textEditingController,
+                    controller: tasksTitleController,
                     style: TextStyle(color: Colors.white, fontSize: 20),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -116,7 +162,7 @@ class _SelfMadeGoalState extends State<SelfMadeGoal> {
                   child: TextField(
                     maxLines: 4,
                     cursorColor: Colors.blue,
-                    controller: textEditingController,
+                    controller: workDetailsController,
                     style: TextStyle(fontSize: 15),
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -221,109 +267,147 @@ class _SelfMadeGoalState extends State<SelfMadeGoal> {
                             Container(
                               width: 300,
                               child: SizedBox(
-                                height: 60,
+                                height: 50,
                                 child: ListView.builder(
-                                  itemCount: listController.length,
                                   scrollDirection: Axis.horizontal,
+                                  itemCount: ex5.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return index != 0
-                                        ? Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 20, 0),
-                                            child: Container(
-                                              width: 190,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xff455A64),
-                                              ),
-                                              child: Stack(
-                                                alignment: AlignmentDirectional
-                                                    .bottomEnd,
-                                                children: [
-                                                  Positioned(
-                                                    left: 40,
-                                                    child: Container(
-                                                      width: 140,
-                                                      child: Row(
-                                                        children: [
-                                                          Expanded(
-                                                            child: Container(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          10),
-                                                              height: 60,
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Color(
-                                                                    0xff455A64),
-                                                              ),
-                                                              child:
-                                                                  TextFormField(
-                                                                controller:
-                                                                    listController[
-                                                                        index],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              setState(
-                                                                () {
-                                                                  listController[
-                                                                          index]
-                                                                      .clear();
-                                                                  listController[
-                                                                          index]
-                                                                      .dispose();
-                                                                  listController
-                                                                      .removeAt(
-                                                                          index);
-                                                                },
-                                                              );
-                                                            },
-                                                            child: Image.asset(
-                                                                'assets/images/closesquare.png'),
-                                                          ),
-                                                        ],
+                                    return Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 20, 0),
+                                      child: Container(
+                                        width: 170,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xff455A64),
+                                        ),
+                                        child: Stack(
+                                          alignment:
+                                              AlignmentDirectional.bottomEnd,
+                                          children: [
+                                            Positioned(
+                                              left: 40,
+                                              child: Container(
+                                                width: 140,
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 10),
+                                                      height: 50,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            Color(0xff455A64),
+                                                      ),
+                                                      child: Text(
+                                                        '${ex5[index]}',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 23),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          ex5.removeAt(index);
+                                                        });
+                                                      },
+                                                      child: Image.asset(
+                                                          'assets/images/closesquare.png'),
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          )
-                                        : Text('');
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(
-                                  () {
-                                    listController.add(TextEditingController());
-                                  },
-                                );
-                              },
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Color(0xff7DA7F7),
-                                ),
-                                child: Image.asset(
-                                  'assets/images/addsquare.png',
-                                ),
-                              ),
-                            ),
+                            StreamBuilder<QuerySnapshot>(
+                                stream:
+                                    _firestore.collection('users').snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  }
+                                  if (snapshot.hasError) {
+                                    return Center(
+                                        child:
+                                            Text('Error: ${snapshot.error}'));
+                                  }
+                                  final QuerySnapshot querySnapshot =
+                                      snapshot.data!;
+                                  List<String> names = [];
+                                  for (var doc in querySnapshot.docs) {
+                                    final Map<String, dynamic> data =
+                                        doc.data() as Map<String, dynamic>;
+                                    if (data.containsKey('name')) {
+                                      names.add(data['name']);
+                                    }
+                                  }
+                                  return GestureDetector(
+                                    onTap: () {
+                                      // setState(
+                                      //   () {
+                                      //     listController.add(TextEditingController());
+                                      //   },
+                                      // );
+                                      SelectDialog.showModal<String>(
+                                        context,
+                                        label: "Select Names",
+                                        multipleSelectedValues: ex5,
+                                        items: names,
+                                        itemBuilder:
+                                            (context, item, isSelected) {
+                                          return ListTile(
+                                            trailing: isSelected
+                                                ? Icon(Icons.check)
+                                                : null,
+                                            title: Text(item),
+                                            selected: isSelected,
+                                          );
+                                        },
+                                        onMultipleItemsChange:
+                                            (List<String> selected) {
+                                          setState(
+                                            () {
+                                              ex5 = selected;
+                                            },
+                                          );
+                                        },
+                                        okButtonBuilder: (context, onPressed) {
+                                          return Align(
+                                            alignment: Alignment.centerRight,
+                                            child: FloatingActionButton(
+                                              onPressed: onPressed,
+                                              child: Icon(Icons.check),
+                                              mini: true,
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xff7DA7F7),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/addsquare.png',
+                                      ),
+                                    ),
+                                  );
+                                }),
                           ],
                         ),
                       ],
@@ -421,16 +505,26 @@ class _SelfMadeGoalState extends State<SelfMadeGoal> {
                     ),
                   ),
                   Container(
-                      width: 170,
-                      height: 50,
-                      child: DatePicker(restorationId: 'app')),
+                    width: 170,
+                    height: 50,
+                    child: DatePicker(
+                      restorationId: 'app',
+                      onDateSelected: (DateTime date) {
+                        setState(() {
+                          selectedDate = date;
+                        });
+                      },
+                    ),
+                  ),
                 ],
               ),
               SizedBox(
                 height: 20,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  _submitDataToFirestore();
+                },
                 child: Container(
                   height: 55,
                   width: size.width,

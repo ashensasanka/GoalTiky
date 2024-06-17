@@ -61,9 +61,11 @@ class _NewRootPageState extends State<NewRootPage> {
   }
 
   void updateNavIndex(int index) {
-    setState(() {
-      _bottomNavIndex = index;
-    });
+    setState(
+      () {
+        _bottomNavIndex = index;
+      },
+    );
   }
 
   @override
@@ -74,9 +76,10 @@ class _NewRootPageState extends State<NewRootPage> {
         title: Text(
           titleList[_bottomNavIndex],
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-              color: Color(0xff1868FE)),
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+            color: Color(0xff1868FE),
+          ),
         ),
         backgroundColor: Color(0xFFD2E1FD),
       ),

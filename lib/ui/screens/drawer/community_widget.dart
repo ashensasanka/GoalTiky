@@ -18,7 +18,7 @@ class CommunityWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xff76B5C5),
+        color: Color(0xff59CBFF),
         borderRadius: BorderRadius.circular(10),
       ),
       height: 130.0,
@@ -28,7 +28,7 @@ class CommunityWidget extends StatelessWidget {
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
+            padding: const EdgeInsets.fromLTRB(5, 0, 15, 30),
             child: Image.asset(badgeList[index].image),
           ),
           Column(
@@ -47,13 +47,13 @@ class CommunityWidget extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
                 child: Container(
-                  width: 240,
+                  width: 250,
                   child: Text(
                     '${badgeList[index].decription}',
                     style: TextStyle(color: Color(0xff433AD9),
-                    fontSize: 15),
+                    fontSize: 13),
                   ),
                 ),
               ),
