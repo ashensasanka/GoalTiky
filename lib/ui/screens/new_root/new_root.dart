@@ -1,8 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-
 import '../../../models/ctasks.dart';
-import '../cart_page.dart';
 import '../create_work/create_work.dart';
 import '../feedbacks/feedbacks.dart';
 import '../time_line_page.dart';
@@ -55,7 +53,7 @@ class _NewRootPageState extends State<NewRootPage> {
       const HomePage(),
       TimeTrackingPage(),
       const CreateWork(),
-      const ProfilePage(),
+      ProfilePage(),
       const FeedBacks(),
     ];
   }

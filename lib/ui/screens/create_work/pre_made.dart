@@ -59,7 +59,7 @@ class _PreMadeState extends State<PreMade> {
               ),
             ),
             Container(
-              child: Text(output),
+              child: Text(output,style: TextStyle(fontSize: 30),),
             ),
             Container(
               decoration: BoxDecoration(
@@ -78,7 +78,7 @@ class _PreMadeState extends State<PreMade> {
               onPressed: () {
                 getValue();
               },
-              child: Text('data'),
+              child: Text('Submit'),
             )
           ],
         ),

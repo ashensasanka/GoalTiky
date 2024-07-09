@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goaltiky/ui/screens/profile/test_page.dart';
 import 'package:goaltiky/ui/screens/widgets/profile_widget.dart';
@@ -7,7 +9,9 @@ import '../../../constants.dart';
 import 'badges_rewards.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  ProfilePage({Key? key}) : super(key: key);
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +70,27 @@ class ProfilePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ProfileWidget(
-                      icon: Icons.person,
-                      title: 'Daniel Martinez',
-                      onTap: () {
+                    StreamBuilder<DocumentSnapshot>(
+                      stream: _firestore.collection('users').doc(user?.uid).snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasError) {
+                          return Center(child: Text('Error: ${snapshot.error}'));
+                        }
+                        final DocumentSnapshot document = snapshot.data!;
+                        final Map<String, dynamic> data =
+                        document.data() as Map<String, dynamic>;
+                        return ProfileWidget(
+                          icon: Icons.person,
+                          title: '${data['name']}',
+                          onTap: () {
 
-                      },
+                          },
+                        );
+
+                      }
                     ),
                     ProfileWidget(
                       icon: Icons.batch_prediction,
