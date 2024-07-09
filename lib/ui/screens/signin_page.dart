@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:goaltiky/ui/screens/signup_page.dart';
 import 'package:goaltiky/ui/screens/widgets/custom_textfield.dart';
 import 'package:page_transition/page_transition.dart';
-
 import '../../constants.dart';
-import '../root_page.dart';
 import 'forgot_password.dart';
 import 'new_root/new_root.dart';
 
@@ -265,7 +263,7 @@ class _SignInState extends State<SignIn> {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: 'New to Planty? ',
+                          text: 'New to GoalTiky? ',
                           style: TextStyle(
                             color: Constants.blackColor,
                           ),

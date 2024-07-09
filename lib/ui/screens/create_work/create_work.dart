@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goaltiky/ui/screens/create_work/pre_made.dart';
 import 'package:goaltiky/ui/screens/create_work/self_made_goal.dart';
 import 'package:goaltiky/ui/screens/create_work/date_picker.dart';
 import 'package:page_transition/page_transition.dart';
@@ -30,7 +31,7 @@ class _CreateWorkState extends State<CreateWork> {
               Navigator.push(
                 context,
                 PageTransition(
-                  child: const Profile(),
+                  child: const PreMade(),
                   type: PageTransitionType.bottomToTop,
                 ),
               );
@@ -44,7 +45,7 @@ class _CreateWorkState extends State<CreateWork> {
               ),
               child: const Center(
                 child: Text(
-                  'Pre made AI Goal',
+                  'Pre Made AI Goal',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
@@ -74,7 +75,7 @@ class _CreateWorkState extends State<CreateWork> {
               ),
               child: const Center(
                 child: Text(
-                  'Self made Goal',
+                  'Self Made Goal',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,

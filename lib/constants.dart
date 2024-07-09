@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 
+const OPENAI_API_KEY = "sk-proj-9hKwlzsOwCMfCmnyz6BGT3BlbkFJdGdyoHwfXhuVETCbZoo9";
+
 class Constants {
   //Primary color
   static var primaryColor = const Color(0xff296e48);
@@ -8,7 +10,7 @@ class Constants {
 
   //Onboarding texts
   static var titleOne = "GoalTiky";
-  static var descriptionOne = "Read how to care for plants in our rich plants guide.";
+  static var descriptionOne = "";
   static var titleTwo = "Sign Up";
   static var descriptionTwo = "Manage your task";
 }

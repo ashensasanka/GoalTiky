@@ -49,6 +49,8 @@ dependencies:
   cloud_firestore: ^5.0.1
   image_picker: ^1.1.2
   fluttertoast: ^8.2.6
+  dash_chat_2: ^0.0.21
+  chat_gpt_sdk: ^2.2.5
 #  flutter_icons: ^1.1.0
 
 dev_dependencies:

@@ -8,7 +8,7 @@ class TimeTrackingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue,
+      backgroundColor: Color(0xffd2e1fd),
       body: ListView(
         children: [
           buildOrderCard(context, 1),
@@ -60,7 +60,7 @@ Widget buildOrderCard(BuildContext context, int index) {
     child: Container(
       width: 400.0,
       child: Card(
-        color: Color(0xffDFEDFD),
+        color: Color(0xff00b5fd),
         margin: EdgeInsets.all(15.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -104,7 +104,7 @@ class _OrderTitle extends StatelessWidget {
                 'ONGOING TASKS',
                 style: TextStyle(
                   fontSize: 20,
-                  color: Color(0xff1868FE),
+                  color: Color(0xffA02055),
                   fontWeight: FontWeight.bold,
                 ),
               )
@@ -112,7 +112,7 @@ class _OrderTitle extends StatelessWidget {
                 'FINISH TASKS',
                 style: TextStyle(
                   fontSize: 20,
-                  color: CupertinoColors.systemGreen,
+                  color: Color(0xff249e81),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -191,7 +191,7 @@ class _DeliveryProcesses1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTextStyle(
       style: TextStyle(
-        color: Color(0xff9b9b9b),
+        color: Color(0xffA02055),
         fontSize: 12.5,
       ),
       child: Padding(
@@ -199,7 +199,7 @@ class _DeliveryProcesses1 extends StatelessWidget {
         child: FixedTimeline.tileBuilder(
           theme: TimelineThemeData(
             nodePosition: 0,
-            color: Color(0xff989898),
+            color: Color(0xffA02055),
             indicatorTheme: IndicatorThemeData(
               position: 0,
               size: 20.0,
@@ -229,7 +229,7 @@ class _DeliveryProcesses1 extends StatelessWidget {
                             processes[index].name,
                             style: DefaultTextStyle.of(context).style.copyWith(
                                   fontSize: 18.0,
-                              color: Color(0xff1868FE),
+                              color: Color(0xffA02055),
                                 ),
                           ),
                         ),
@@ -250,7 +250,7 @@ class _DeliveryProcesses1 extends StatelessWidget {
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Color(0xff6196C7),
+                                      color: Color(0xffA02055),
                                       borderRadius: BorderRadius.circular(
                                           10), // Set the corner radius here
                                     ),
@@ -311,7 +311,7 @@ class _DeliveryProcesses2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTextStyle(
       style: TextStyle(
-        color: Color(0xff9b9b9b),
+        color: Color(0xff2055FF),
         fontSize: 12.5,
       ),
       child: Padding(
@@ -349,7 +349,7 @@ class _DeliveryProcesses2 extends StatelessWidget {
                             processes[index].name,
                             style: DefaultTextStyle.of(context).style.copyWith(
                               fontSize: 18.0,
-                              color: Colors.green
+                              color: Color(0xff249e81)
                             ),
                           ),
                         ),
@@ -402,7 +402,7 @@ class _DeliveryProcesses2 extends StatelessWidget {
             indicatorBuilder: (_, index) {
 
                 return DotIndicator(
-                  color: Color(0xff66c97f),
+                  color: Color(0xff249e81),
                   child: Icon(
                     Icons.check,
                     color: Colors.white,
@@ -411,7 +411,7 @@ class _DeliveryProcesses2 extends StatelessWidget {
                 );
             },
             connectorBuilder: (_, index, ___) => SolidLineConnector(
-              color: Color(0xff66c97f),
+              color: Color(0xff249e81),
             ),
           ),
         ),

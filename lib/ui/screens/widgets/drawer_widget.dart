@@ -72,11 +72,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         actions: [
           ElevatedButton(
             onPressed: () {
-              fireStoreService.addProPic(
-                  user?.uid,
-                  _image,
-                  'image'
-              );
+              fireStoreService.addProPic(user?.uid, _image, 'image');
               Fluttertoast.showToast(
                 msg: "Note added successfully",
                 toastLength: Toast.LENGTH_SHORT,
@@ -170,8 +166,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 AssetImage('assets/images/propic.png'),
                           )
                         : CircleAvatar(
-                            backgroundImage:
-                                NetworkImage("${data['imageUrl']}"),
+                            backgroundImage: NetworkImage(
+                              "${data['imageUrl']}",
+                            ),
                           );
                   },
                 ),
@@ -194,6 +191,41 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             onTap: () {
               Navigator.pop(context);
               widget.onNavIndexChange(0);
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              CupertinoIcons.eyedropper,
+              color: Colors.red,
+            ),
+            title: Text(
+              "Edit",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              widget.onNavIndexChange(3);
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              CupertinoIcons.person_2_alt,
+              color: Colors.red,
+            ),
+            title: Text(
+              "Chat BOT",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {
+              // Navigate to My Wish List Page
+              Navigator.pop(context); // Close Drawer
+              Navigator.pushNamed(context, '/chatbot');
             },
           ),
 
