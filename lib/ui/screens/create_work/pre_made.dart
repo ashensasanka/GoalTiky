@@ -9,7 +9,6 @@ class PreMade extends StatefulWidget {
   State<PreMade> createState() => _PreMadeState();
 }
 
-
 class _PreMadeState extends State<PreMade> {
   TextEditingController messageController = TextEditingController();
   String output = '20';
@@ -59,9 +58,6 @@ class _PreMadeState extends State<PreMade> {
               ),
             ),
             Container(
-              child: Text(output,style: TextStyle(fontSize: 30),),
-            ),
-            Container(
               decoration: BoxDecoration(
                 color: Color(0xff455A64),
               ),
@@ -79,7 +75,15 @@ class _PreMadeState extends State<PreMade> {
                 getValue();
               },
               child: Text('Submit'),
-            )
+            ),
+            Container(
+              child: Text(
+                output,
+                style: TextStyle(
+                  fontSize: 30,
+                ),
+              ),
+            ),
           ],
         ),
       ),

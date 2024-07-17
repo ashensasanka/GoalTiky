@@ -1,98 +1,80 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 class Ctasks {
   final int ctaskId;
-  final int price;
-  final String size;
-  final double rating;
-  final int humidity;
-  final String temperature;
   final String title;
   final String duedate;
-  bool isFavorated;
-  final String decription;
-  bool isSelected;
+  final String time;
+  final String workDetails;
+  final String workType;
 
-  Ctasks(
-      {required this.ctaskId,
-        required this.price,
-        required this.title,
-        required this.duedate,
-        required this.size,
-        required this.rating,
-        required this.humidity,
-        required this.temperature,
-        required this.isFavorated,
-        required this.decription,
-        required this.isSelected});
+  Ctasks({
+    required this.ctaskId,
+    required this.title,
+    required this.duedate,
+    required this.time,
+    required this.workDetails,
+    required this.workType,
+  });
 
-  //List of Plants data
-  static List<Ctasks> cTasksList = [
-    Ctasks(
-        ctaskId: 0,
-        price: 22,
-        title: 'Submit Project Proposal',
-        duedate: '20 June',
-        size: 'Small',
-        rating: 4.5,
-        humidity: 34,
-        temperature: '23 - 34',
-        isFavorated: true,
-        decription:
-        'This plant is one of the best plant. It grows in most of the regions in the world and can survive'
-            'even the harshest weather condition.',
-        isSelected: false),
-    Ctasks(
-        ctaskId: 1,
-        price: 11,
-        title: 'Mobile App Design',
-        duedate: '21 March',
-        size: 'Medium',
-        rating: 4.8,
-        humidity: 56,
-        temperature: '19 - 22',
-        isFavorated: false,
-        decription:
-        'This plant is one of the best plant. It grows in most of the regions in the world and can survive'
-            'even the harshest weather condition.',
-        isSelected: false),
-    Ctasks(
-        ctaskId: 2,
-        price: 18,
-        title: 'Submit Project Proposal',
-        duedate: 'Beach Daisy',
-        size: 'Large',
-        rating: 4.7,
-        humidity: 34,
-        temperature: '22 - 25',
-        isFavorated: false,
-        decription:
-        'This plant is one of the best plant. It grows in most of the regions in the world and can survive'
-            'even the harshest weather condition.',
-        isSelected: false),
-    Ctasks(
-        ctaskId: 3,
-        price: 30,
-        title: 'Mobile App Design',
-        duedate: 'Big Bluestem',
-        size: 'Small',
-        rating: 4.5,
-        humidity: 35,
-        temperature: '23 - 28',
-        isFavorated: false,
-        decription:
-        'This plant is one of the best plant. It grows in most of the regions in the world and can survive'
-            'even the harshest weather condition.',
-        isSelected: false),
-  ];
+  // //List of Plants data
+  // static List<Ctasks> cTasksList = [
+  //   Ctasks(
+  //       ctaskId: 0,
+  //       title: 'Submit Project Proposal',
+  //       duedate: '20 June',
+  //       time: '',
+  //       workDetails: '',
+  //       workType:''),
+  //   Ctasks(
+  //       ctaskId: 1,
+  //       title: 'Mobile App Design',
+  //       duedate: '21 March',
+  //       time: '',
+  //       workDetails: '',
+  //       workType:''),
+  //   Ctasks(
+  //       ctaskId: 2,
+  //       title: 'Submit Project Proposal',
+  //       duedate: 'Beach Daisy',
+  //       time: '',
+  //       workDetails:'',
+  //       workType:''),
+  //   Ctasks(
+  //       ctaskId: 3,
+  //       title: 'Mobile App Design',
+  //       duedate: 'Big Bluestem',
+  //       time: '',
+  //       workDetails:'',
+  //       workType:''),
+  // ];
 
-  //Get the favorated items
-  static List<Ctasks> getFavoritedPlants(){
-    List<Ctasks> _travelList = Ctasks.cTasksList;
-    return _travelList.where((element) => element.isFavorated == true).toList();
-  }
+  static Future<List<Ctasks>> getTasksFromFirestore() async {
+    List<Ctasks> cTasksList = [];
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
 
-  //Get the cart items
-  static List<Ctasks> addedToCartPlants(){
-    List<Ctasks> _selectedPlants = Ctasks.cTasksList;
-    return _selectedPlants.where((element) => element.isSelected == true).toList();
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('tasks${user?.uid}')
+          .get();
+
+      querySnapshot.docs.forEach((doc) {
+        cTasksList.add(Ctasks(
+            ctaskId: doc['taskIndex'].toInt(),
+            title: doc['taskTitle'],
+            duedate: doc['date'],
+            time: doc['time'],
+            workDetails:doc['workDetails'],
+            workType:doc['workType'] ));
+      });
+
+      print('Claims retrieved successfully: $cTasksList'); // Add a debug print statement
+      return cTasksList;
+    } catch (error) {
+      print('Error retrieving claims: $error'); // Log the error
+      return []; // Return an empty list if there's an error
+    }
   }
 }

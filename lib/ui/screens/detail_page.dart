@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goaltiky/ui/screens/widgets/all_task_widget.dart';
 import 'package:goaltiky/ui/screens/widgets/task_widget.dart';
@@ -18,20 +19,29 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  //Toggle Favorite button
-  bool toggleIsFavorated(bool isFavorited) {
-    return !isFavorited;
+  List<Ctasks> _cTasksList = [];
+  User? user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchClaims(); // Call the method to fetch claims when the widget initializes
   }
 
-  //Toggle add remove from cart
-  bool toggleIsSelected(bool isSelected) {
-    return !isSelected;
+  // Method to fetch claims from Firestore
+  void fetchClaims() async {
+    List<Ctasks> claims = await Ctasks.getTasksFromFirestore();
+    setState(
+          () {
+            _cTasksList = claims; // Update the state with retrieved claims
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<Ctasks> _cTasksList = Ctasks.cTasksList;
+
     double progressValue = 50;
     return Scaffold(
       backgroundColor: Color(0xffE2ECFF),
@@ -188,17 +198,17 @@ class _DetailPageState extends State<DetailPage> {
                       fontSize: 23.0,
                     ),
                   ),
-                  Container(
-                    width: 350,
-                    height: 100,
-                    child: Text(
-                      _cTasksList[widget.taskId].decription,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xff7DA7F7),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   width: 350,
+                  //   height: 100,
+                  //   child: Text(
+                  //     _cTasksList[widget.taskId].decription,
+                  //     style: TextStyle(
+                  //       fontSize: 15,
+                  //       color: Color(0xff7DA7F7),
+                  //     ),
+                  //   ),
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

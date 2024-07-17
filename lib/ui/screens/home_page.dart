@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goaltiky/ui/screens/widgets/task_widget.dart';
 import 'package:page_transition/page_transition.dart';
@@ -14,10 +15,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  List<Ctasks> _completedList = [];
+  User? user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchClaims(); // Call the method to fetch claims when the widget initializes
+  }
+
+  // Method to fetch claims from Firestore
+  void fetchClaims() async {
+    List<Ctasks> claims = await Ctasks.getTasksFromFirestore();
+    setState(
+          () {
+            _completedList = claims; // Update the state with retrieved claims
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<Ctasks> _completedList = Ctasks.cTasksList;
+
 
     return Scaffold(
       backgroundColor: Color(0xffE2ECFF),
@@ -69,23 +90,16 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 100, 0),
                     child: Text(
                       'Completed Tasks',
                       style: TextStyle(
                         color: Color(0xff1868FE),
                         fontSize: 20,
                       ),
-                    ),
-                  ),
-                  Text(
-                    'See all',
-                    style: TextStyle(
-                      color: Color(0xff1868FE),
-                      fontSize: 17,
                     ),
                   ),
                 ],
@@ -206,23 +220,16 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 100, 0),
                     child: Text(
                       'Ongoing  Works',
                       style: TextStyle(
                         color: Color(0xff1868FE),
                         fontSize: 20,
                       ),
-                    ),
-                  ),
-                  Text(
-                    'See all',
-                    style: TextStyle(
-                      color: Color(0xff1868FE),
-                      fontSize: 17,
                     ),
                   ),
                 ],

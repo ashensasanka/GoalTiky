@@ -70,7 +70,6 @@ class _SelfMadeGoalState extends State<SelfMadeGoal> {
 
   @override
   Widget build(BuildContext context) {
-    List<Ctasks> _completedList = Ctasks.cTasksList;
     Size size = MediaQuery.of(context).size;
     int? counts = ex5.length + 1;
     return Scaffold(

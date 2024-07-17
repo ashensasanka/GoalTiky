@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -17,14 +18,27 @@ class AllTaskWidget extends StatefulWidget {
 }
 
 class _AllTaskWidgetState extends State<AllTaskWidget> {
-  bool toggleIsSelected(bool isSelected) {
-    return !isSelected;
+  List<Ctasks> cTaskList = [];
+  User? user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchClaims(); // Call the method to fetch claims when the widget initializes
+  }
+
+  // Method to fetch claims from Firestore
+  void fetchClaims() async {
+    List<Ctasks> claims = await Ctasks.getTasksFromFirestore();
+    setState(
+          () {
+            cTaskList = claims; // Update the state with retrieved claims
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Ctasks> cTaskList = Ctasks.cTasksList;
-
     return Container(
       decoration: BoxDecoration(
         color: Color(0xff455A64),
@@ -47,44 +61,6 @@ class _AllTaskWidgetState extends State<AllTaskWidget> {
                   color: Colors.white,
                 ),
               ),
-            ),
-          ),
-          Container(
-            height: 45,
-            width: 45,
-            alignment: Alignment.center,
-            child: IconButton(
-              onPressed: () {
-                setState(
-                  () {
-                    bool isSelected =
-                        toggleIsSelected(cTaskList[widget.taskId].isSelected);
-
-                    cTaskList[widget.taskId].isSelected = isSelected;
-                  },
-                );
-              },
-              icon: Icon(
-                cTaskList[widget.taskId].isSelected == true
-                ? Icons.circle_outlined
-                : Icons.check_circle_outline,
-                color: cTaskList[widget.taskId].isSelected == true
-                    ? Colors.white
-                    : Colors.black,
-                size: 30,
-              ),
-            ),
-            decoration: BoxDecoration(
-              color: cTaskList[widget.taskId].isSelected == true
-                  ? Colors.red
-                  : Color(0xff4EBF68),
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(0, 1),
-                  blurRadius: 5,
-                  color: Constants.primaryColor.withOpacity(.3),
-                ),
-              ],
             ),
           ),
         ],
